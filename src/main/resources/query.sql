@@ -1,0 +1,1 @@
+insert into employee (address,contact,email,enabled,name,password,post,profile_pic) VALUES ('Baneshwor','92222222','thapa30@fmak.com',true,'sushant','12345','Eng','');
