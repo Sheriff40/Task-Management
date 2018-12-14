@@ -70,9 +70,7 @@ public class AdminController {
 				throw e;
 			}
 			employeeDAO.delete(employee);
-			ResponseMessage message = new ResponseMessage();
-			message.setCode(HttpStatus.OK.value());
-			message.setMessage("success");
+			ResponseMessage message = new ResponseMessage(200, "Success");
 			return new ResponseEntity<ResponseMessage>(message,HttpStatus.OK);		
 	}
 	

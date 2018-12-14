@@ -1,9 +1,12 @@
 package org.ocean.dto;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Employee {
@@ -19,6 +22,10 @@ public class Employee {
 	private String Email;
 	private String password;
 	private Boolean enabled;
+	
+	@OneToMany(mappedBy = "employee")
+	private List<Tasks> tasks;
+	
 	public int getId() {
 		return id;
 	}
