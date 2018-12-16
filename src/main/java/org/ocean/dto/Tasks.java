@@ -18,9 +18,12 @@ public class Tasks {
 	private String description;
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
+	private String image;
 	private Boolean Notification = false;
 	@ManyToOne
 	private Employee employee;
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -67,7 +70,15 @@ public class Tasks {
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
-	@Override
+	
+	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	@Override  
 	public String toString() {
 		return "Tasks [id=" + id + ", title=" + title + ", description=" + description + ", createdDate=" + createdDate
 				+ ", updatedDate=" + updatedDate + ", Notification=" + Notification + ", employee=" + employee + "]";

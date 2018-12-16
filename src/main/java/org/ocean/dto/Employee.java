@@ -1,11 +1,13 @@
 package org.ocean.dto;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -23,8 +25,12 @@ public class Employee {
 	private String password;
 	private Boolean enabled;
 	
+	
 	@OneToMany(mappedBy = "employee")
 	private List<Tasks> tasks;
+	
+	@ManyToOne
+	private EmployeeTime employeeTime = new EmployeeTime(LocalTime.of(9, 00), LocalTime.of(17, 00));
 	
 	public int getId() {
 		return id;
@@ -80,11 +86,19 @@ public class Employee {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
+
+	public EmployeeTime getEmployeeTime() {
+		return employeeTime;
+	}
+	public void setEmployeeTime(EmployeeTime employeeTime) {
+		this.employeeTime = employeeTime;
+	}
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", profilePic=" + profilePic + ", post=" + post + ", Address="
 				+ Address + ", Contact=" + Contact + ", Email=" + Email + ", password=" + password + ", enabled="
 				+ enabled + "]";
 	}
+	
 	
 }
