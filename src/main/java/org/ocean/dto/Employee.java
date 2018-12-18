@@ -1,6 +1,6 @@
 package org.ocean.dto;
 
-import java.time.LocalTime;
+
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
 
 @Entity
 public class Employee {
@@ -24,13 +25,14 @@ public class Employee {
 	private String Email;
 	private String password;
 	private Boolean enabled;
+	private Boolean notification = false;
 	
 	
 	@OneToMany(mappedBy = "employee")
-	private List<Tasks> tasks;
+	private List<Tasks> tasks = null;
 	
 	@ManyToOne
-	private EmployeeTime employeeTime = new EmployeeTime(LocalTime.of(9, 00), LocalTime.of(17, 00));
+	private EmployeeTime employeeTime;
 	
 	public int getId() {
 		return id;
@@ -87,6 +89,20 @@ public class Employee {
 		this.enabled = enabled;
 	}
 
+	
+	
+	public Boolean getNotification() {
+		return notification;
+	}
+	public void setNotification(Boolean notification) {
+		this.notification = notification;
+	}
+	public List<Tasks> getTasks() {
+		return tasks;
+	}
+	public void setTasks(List<Tasks> tasks) {
+		this.tasks = tasks;
+	}
 	public EmployeeTime getEmployeeTime() {
 		return employeeTime;
 	}
@@ -97,8 +113,10 @@ public class Employee {
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", profilePic=" + profilePic + ", post=" + post + ", Address="
 				+ Address + ", Contact=" + Contact + ", Email=" + Email + ", password=" + password + ", enabled="
-				+ enabled + "]";
+				+ enabled + ", notification=" + notification + ", tasks=" + tasks + "]";
 	}
+	
+	
 	
 	
 }

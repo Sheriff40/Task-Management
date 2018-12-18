@@ -1,12 +1,16 @@
 package org.ocean.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Tasks {
@@ -19,10 +23,13 @@ public class Tasks {
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
 	private String image;
-	private Boolean Notification = false;
+	
+	@JsonIgnore
 	@ManyToOne
 	private Employee employee;
 	
+	@OneToMany
+	private List<Comment> comments;
 	
 	public int getId() {
 		return id;
@@ -58,18 +65,7 @@ public class Tasks {
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-	public Boolean getNotification() {
-		return Notification;
-	}
-	public void setNotification(Boolean notification) {
-		Notification = notification;
-	}
-	public Employee getEmployee() {
-		return employee;
-	}
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
+	
 	
 	
 	public String getImage() {
@@ -78,10 +74,27 @@ public class Tasks {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	@Override  
+	
+	
+	
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+	@Override
 	public String toString() {
 		return "Tasks [id=" + id + ", title=" + title + ", description=" + description + ", createdDate=" + createdDate
-				+ ", updatedDate=" + updatedDate + ", Notification=" + Notification + ", employee=" + employee + "]";
+				+ ", updatedDate=" + updatedDate + ", image=" + image + ", comments=" + comments + "]";
 	}
+	
+	
 		
 }

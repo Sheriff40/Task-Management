@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.ocean.dao.EmployeeDAO;
 import org.ocean.dao.TasksDAO;
+import org.ocean.dto.Comment;
 import org.ocean.dto.Employee;
 import org.ocean.dto.ResourceNotFoundException;
 import org.ocean.dto.ResponseMessage;
@@ -33,26 +34,46 @@ public class EmployeeController {
 	@Autowired
 	private TasksDAO taskDAO;
 	
+	private Tasks task = null; 
+	
 	private Employee employee = null;
 	
 	private LocalTime time = LocalTime.now();
 	
-	private Tasks task = null;
+	private ResourceNotFoundException exception404 = new ResourceNotFoundException();
 	
-	
-	@GetMapping(value = "/tasks")
-	public @ResponseBody List<Tasks> getTasks()
+	@GetMapping(value = "/tasks/{id}")
+	public @ResponseBody List<Tasks> getEmployeesTasks(@PathVariable("id")int employeeId) throws ResourceNotFoundException
 	{
-		return taskDAO.findAll();
+		
+		employee = employeeDAO.findById(employeeId).orElse(null);
+		if(employee == null)
+		{
+			throw exception404;
+		}
+		else
+		{
+			for(Tasks t: employee.getTasks())
+			{
+				if (!(t.getComments().isEmpty()))
+						{
+							employee.setNotification(true);
+							break;
+						}
+			}
+			employeeDAO.save(employee);
+		}
+				
+		return employee.getTasks();
 	}
 	
 	@GetMapping(value = "/task/{id}")
-	public @ResponseBody Tasks getTasks(@PathVariable ("id") int taskId) throws ResourceNotFoundException
+	public @ResponseBody Tasks getSingleTask(@PathVariable ("id") int taskId) throws ResourceNotFoundException
 	{
 		task = taskDAO.findById(taskId).orElse(null);
 		if(task == null)
 		{
-			throw new ResourceNotFoundException();
+			throw exception404;
 		}
 		return task;
 	}
@@ -63,7 +84,7 @@ public class EmployeeController {
 		employee = employeeDAO.findById(employeeId).orElse(null);
 		if(employee == null)
 		{
-			throw new ResourceNotFoundException();
+			throw exception404;
 		}
 		task.setCreatedDate(LocalDateTime.now());
 		task.setEmployee(employee);
@@ -72,8 +93,6 @@ public class EmployeeController {
 			taskDAO.save(task);
 		}
 		
-					
-			
 		return task;
 		
 	}		
@@ -84,7 +103,7 @@ public class EmployeeController {
 		employee = employeeDAO.findById(employeeId).orElse(null);
 		if(employee == null)
 		{
-			throw new ResourceNotFoundException();
+			throw exception404;
 		}
 		if((time.isAfter(employee.getEmployeeTime().getTimefrom())) && (time.isBefore(employee.getEmployeeTime().getTimeto())))
 		{
@@ -97,14 +116,28 @@ public class EmployeeController {
 	@DeleteMapping(value = "/task/{id}")
 	public ResponseEntity<ResponseMessage> deleteTask(@PathVariable ("id") int taskId) throws ResourceNotFoundException
 	{
-		Tasks task = taskDAO.findById(taskId).orElse(null);
+		task = taskDAO.findById(taskId).orElse(null);
 		if(task == null)
 		{
-			throw new ResourceNotFoundException();
+			throw exception404;
 		}
 		taskDAO.delete(task);
 		ResponseMessage message = new ResponseMessage(200 , "Success");
 		return new ResponseEntity<ResponseMessage>(message,HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/comment/{id}")
+	public @ResponseBody List<Comment> viewComments(@PathVariable ("id") int taskId) throws ResourceNotFoundException
+	{
+		
+		task = taskDAO.findById(taskId).orElse(null);
+		if(task == null)
+		{
+			throw exception404;
+		}
+		return task.getComments();
+	}
+	
+	
+		
 }
